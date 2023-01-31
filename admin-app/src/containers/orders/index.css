@@ -1,0 +1,30 @@
+.logo{
+    text-align: center;
+    color: black;
+    margin-bottom: 20px;
+}
+.logo h3{
+    color: black;
+}
+.ticket{
+    line-height: 7px;
+}
+table{
+    width: 100%;
+
+}
+table th{
+    background-color: rgba(137, 137, 137, 0.335);
+}
+.total h3{
+    float: right;
+    position: relative;
+    font-size: 20px;
+}
+.footer-details{
+    clear: both;
+    line-height: 7px;
+}
+.footer{
+    text-align: center;
+}
