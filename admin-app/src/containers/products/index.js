@@ -21,6 +21,7 @@ export const Products = (props) => {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
+  const formatter= new Intl.NumberFormat()
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [productPictures, setProductPictures] = useState([]);
@@ -86,6 +87,7 @@ export const Products = (props) => {
             <th>Prix</th>
             <th>Quantité</th>
             <th>Fournisseur</th>
+            <th>Code barre</th>
           </tr>
         </thead>
         <tbody>
@@ -97,10 +99,11 @@ export const Products = (props) => {
                 <tr onClick={()=> showProductDetailsModal(product)} key={product._id}>
                   <td>2</td>
                   <td>{product.name}</td>
-                  <td>{product.price}</td>
+                  <td>{formatter.format(product.price)}</td>
                   <td>{product.quantityp}</td>
 
                   <td>{product.category}</td>
+                  <td>{product.id}</td>
                 </tr>
               
               ) : null

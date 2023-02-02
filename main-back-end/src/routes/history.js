@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireSignin, adminMiddleware } = require('../command-middleware');
-const {addHistory, getHistoryD,getHistoryN} = require('../controller/history')
+const {addHistory, getHistoryD,getHistoryN, addHistoryP} = require('../controller/history')
 const multer = require('multer');
 const router = express.Router();
 
@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 router.post('/history/add',upload.array('packImage'),addHistory);
+router.post('/historyP/add',upload.array('packImage'),addHistoryP);
 router.post('/history/getDay',upload.array('packImage'),getHistoryD);
 router.post('/history/getN',upload.array('packImage'),getHistoryN);
 

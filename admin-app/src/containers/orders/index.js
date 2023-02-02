@@ -10,6 +10,7 @@ import './index.css'
 import ReactToPrint from 'react-to-print'
 
 let options =[]
+let PrixTotal=0
 export const Orders = (props) => {
 
   
@@ -21,14 +22,25 @@ export const Orders = (props) => {
   let pass2=false;
   console.log(quantity)
   const [query, setQuery] = useState('');
+  const formatter= new Intl.NumberFormat()
   const [handleKey, setHandleKey] = useState('');
   const [handleKeyR, setHandleKeyR] = useState('');
-  
+  const [handleKey1, setHandleKey1] = useState('');
+  const [handleKey2, setHandleKey2] = useState('');
+  if(handleKey2==='Enter'){
+    document.getElementById('i').focus()
+    setHandleKey2("")
+}
+if(handleKey1==='Enter'){
+  document.getElementById('rd').value=formatter.format(PrixTotal-document.getElementById('r').value)
+}
   if(handleKey==='Enter'){
     pass1=true
+    document.getElementById('form1').focus()
     setHandleKey('')
-    console.log(handleKey)
     quantity=document.getElementById("i").value
+    document.getElementById('form1').value=""
+    document.getElementById('i').value=""
     if(!quantity){
       quantity = 1
     }
@@ -39,7 +51,7 @@ export const Orders = (props) => {
     console.log(handleKeyR)
     remise=document.getElementById("f").value
     if(!remise){
-      remise = 1
+      remise = 0
     }
   }
   
@@ -47,8 +59,8 @@ export const Orders = (props) => {
     if (categories.id==query){
   options.push(
   
-    { value: categories._id, name: categories.name, prix : categories.price ,quantity: quantity,RM :remise,PT: ((categories.price)*(1-remise/100))*quantity})
-    console.log('this is',(parseFloat((categories.price)))  )
+    { value: categories._id,id:categories.id, name: categories.name, prix : categories.price_vente ,quantity: quantity,RM :remise,PT: ((categories.price_vente)*(1-remise/100))*quantity})
+    PrixTotal=PrixTotal+((categories.price_vente)*(1-remise/100))*quantity
     
 }
     console.log(options)
@@ -75,20 +87,21 @@ const calcpt = (options) => {
       setShow(true);
       console.log(options)
       for(let i=0;i<options.length;i++){
-  
+      setTimeout(function(i){
+        console.log('this is the i',i)
+        const form = new FormData();
+        form.append('name', options[i].name);
+        form.append('id', options[i].id);
+        form.append('quantity', options[i].quantity);
+        form.append('price_totale',options[i].PT)
+        form.append('remise', options[i].RM);
+        dispatch(addHistoryP(form));
+      },1000*i,i)
       
-      const form = new FormData();
-      form.append('name', options[i].name);
-      form.append('id', options[i].id);
-      form.append('quantity', options[i].quantity);
-      form.append('quantity', options[i].RM);
-      form.append('price_totale',options[i].PT)
-    
-      dispatch(addHistoryP(form));
     }
   }
 
-  const handleClose = () => setShow(false);
+  const handleClose = () =>     window.location.reload(true);
   const ComponentRef=useRef()
   const renderorders = () => {
    
@@ -97,7 +110,7 @@ const calcpt = (options) => {
       <Table responsive="sm">
         <thead>
           <tr>
-            <th>#</th>
+            
             <th>Nom de produit</th>
             <th>Prix</th>
             <th>Quantité</th>
@@ -113,11 +126,11 @@ const calcpt = (options) => {
                
                 <tbody>
                 <tr key={option.value}>
-                  <td>2</td>
+                  
                   <td>{option.name}</td>
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
-                  <td>{option.PT}</td>
+                  <td>{formatter.format(option.PT)}</td>
                   <td>{option.RM}</td>
                 </tr>
                 </tbody> 
@@ -135,7 +148,7 @@ const calcpt = (options) => {
         <Row style={{marginTop : "50px" , marginLeft :"2px"}}>
           <Col md={4}>
             <div style={{ display: 'flex' , marginBottom : "100px"}}>
-              <h3>Produit a vendre</h3>
+              <h3>Boite a vendre</h3>
             </div>
           </Col>
           <Col>
@@ -145,7 +158,8 @@ const calcpt = (options) => {
                   id="form1"
                   placeholder='code barre'
                   class="form-control"
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e)=>setQuery(e.target.value)}
+                  onKeyPress={(e)=>setHandleKey2(e.key)}
                 />
 
               </div>
@@ -165,6 +179,21 @@ const calcpt = (options) => {
             </div>
           </Col>
         </Row>
+        <Row><Col style={{float :'left'}}><h5>Prix Total : {PrixTotal? formatter.format(PrixTotal):null} DT</h5></Col>
+        <Col><input type="text" 
+                  placeholder="Reglements : ESPECE"
+                  class="form-control"
+                  id='r'
+                  onKeyPress={(e)=>setHandleKey1(e.key)}
+                  
+                />
+                <input type="text" 
+                  placeholder="Rendu"
+                  class="form-control"
+                  id='rd'
+                  
+                /></Col></Row>
+       
         <Row>
           <Col>
             
@@ -174,6 +203,7 @@ const calcpt = (options) => {
         </Row>
       </Container>
       <Button onClick={handleShow} >Valideé</Button>
+      <Button onClick={handleClose} >annuler</Button>
       <Modal
         show={show}
         handleClose={handleClose}
@@ -182,8 +212,8 @@ const calcpt = (options) => {
       content={()=>ComponentRef.current}/>
       <div class="facture"  ref={ComponentRef}>
         <div class="logo">
-        <h3>شركة عمروش للتجارة</h3>
-        <h5>الطريق الرئيسي بالزاوية</h5>
+        <h3>Superette Amrouch</h3>
+        <h5>Zouiet El Mgaiez </h5>
         
         </div>
         <hr></hr>
@@ -199,8 +229,8 @@ const calcpt = (options) => {
           <th>Articles</th>
           <th>Prix</th>
           <th>Qte</th>
-          <th>Remise</th>
           <th>Total</th>
+          <th>Remise</th>
         </tr>
       </thead>
       <tbody>
@@ -210,7 +240,7 @@ const calcpt = (options) => {
                   <td>{option.name}</td>
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
-                  <td>{option.PT}</td>
+                  <td>{formatter.format(option.PT)}</td>
                   <td>{option.RM}</td>
                 </tr>
                 
@@ -218,11 +248,14 @@ const calcpt = (options) => {
           }
       </tbody>
     </table>
-    
+    <hr></hr>
     <div class="total">
-      <h3>Prix Total : {calcpt(options)}</h3>
+      <h3>Prix Total : {formatter.format(calcpt(options))} DT</h3>
     </div>
-   
+    <div class="info">
+      <p>Reglements : {document.getElementById('r')? formatter.format(document.getElementById('r').value): null}</p>
+      <p>Rendu : {document.getElementById('rd')? document.getElementById('rd').value: null}</p>
+    </div>
     <div class="footer">
       Merci pour votre visite
     </div>

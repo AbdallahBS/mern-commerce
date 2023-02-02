@@ -23,8 +23,8 @@ const Layout =(props)=>{
                <li><NavLink to ={'/packs'}>Boites</NavLink></li>
           
               <li><NavLink to ={'/products'}>Produits</NavLink></li>
-              <li><NavLink to ={'/orders'}>Demandes Pour Les Clients Spéciale </NavLink></li>
-              <li><NavLink to ={'/orders2'}>Demandes Pour Les client </NavLink></li>
+              <li><NavLink to ={'/orders'}>Demandes (Boites)</NavLink></li>
+              <li><NavLink to ={'/orders2'}>Demandes (Piece)</NavLink></li>
       
      </ul>
             </div>

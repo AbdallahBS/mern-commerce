@@ -24,7 +24,8 @@ export const Products = (props) => {
   const [name, setName] = useState('');
   const [quantityP, setQuantityP] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [price, setPrice] = useState('');
+  const [price_achat, setPriceAchat] = useState('');
+  const [price_vente, setPriceVente] = useState('');
   const [priceproduct, setPriceProduct] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -32,6 +33,7 @@ export const Products = (props) => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const formatter= new Intl.NumberFormat()
   const [packDetailModal, setPackDetailModal] = useState(false);
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
@@ -182,13 +184,10 @@ export const Products = (props) => {
     form.append('name', name);
     form.append('quantity', quantity);
     form.append('quantityP',quantityP)
-    form.append('price', price);
-    form.append('price_product', priceproduct);
-    
+    form.append('price_achat', price_achat);
+    form.append('price_vente', price_vente);
+    form.append('price_product', priceproduct); 
     form.append('category', category);
-    for (let pic of productPictures) {
-      form.append('packImage', pic);
-    }
     dispatch(addPack(form));
     setShow(false)
   }
@@ -196,11 +195,8 @@ export const Products = (props) => {
     const form = new FormData();
     form.append('id', id);
     form.append('name', name);
-    form.append('price', price);
+    form.append('price_vente', price_vente);
     form.append('price_product', priceproduct);
-    for (let pic of productPictures) {
-      form.append('packImage', pic);
-    }
     dispatch(updatePack(form));
     setShow1(false)
   }
@@ -213,28 +209,21 @@ export const Products = (props) => {
   const handleShow = () => setShow(true);
   const handleShow1 = () => setShow1(true);
   const handleShow2 = () => setShow2(true);
-  const handleProductPicture = (e) => {
-    setProductPictures([
-      ...productPictures,
-      e.target.files[0],
-    ]);
-
-  }
-
-
   const renderPack = () => {
     return (
       <>
         <Table responsive="sm">
           <thead>
             <tr>
-              <th>#</th>
+              
               <th>Nom de pack</th>
-              <th>Prix</th>
+              <th>Prix d'achat</th>
+              <th>Prix de vente</th>
               <th>Prix Du produit</th>
               <th>Quantité</th>
               <th>Fournisseur</th>
               <th>Date</th>
+              <th>Code Barre</th>
             </tr>
           </thead>
           <tbody>
@@ -242,15 +231,16 @@ export const Products = (props) => {
               pack.packs.length > 0 ?
 
                 pack.packs.filter((pack) => pack.name.toLowerCase().includes(query)).map(pack =>
-
                   <tr onClick={() => showProductDetailsModal(pack)} key={pack.name}>
-                    <td>2</td>
+                    
                     <td>{pack.name}</td>
-                    <td>{pack.price}</td>
-                    <td>{pack.price_product}</td>
+                    <td>{formatter.format(pack.price_achat)}</td>
+                    <td>{formatter.format(pack.price_vente)}</td>
+                    <td>{formatter.format(pack.price_product)}</td>
                     <td>{pack.quantity}</td>
                     <td>{pack.category}</td>
                     <td>{pack.createdAt}</td>
+                    <td>{pack.id}</td>
                   </tr>
 
                 ) : null
@@ -288,10 +278,16 @@ export const Products = (props) => {
           onChange={(e) => setQuantity(e.target.value)}
         />
         <Input
-          label="Prix"
-          value={price}
-          placeholder={'Prix'}
-          onChange={(e) => setPrice(e.target.value)}
+          label="Prix d'achat"
+          value={price_achat}
+          placeholder={"Prix d'achat"}
+          onChange={(e) => setPriceAchat(e.target.value)}
+        />
+         <Input
+          label="Prix de vente"
+          value={price_vente}
+          placeholder={"Prix de Vente"}
+          onChange={(e) => setPriceVente(e.target.value)}
         />
         <Input
         label="Quantité des produits/ 1 Boite"
@@ -359,10 +355,10 @@ export const Products = (props) => {
           onChange={(e) => setName(e.target.value)}
         />
         <Input
-          label="Prix"
-          value={price}
-          placeholder={'Modifier Le Prix'}
-          onChange={(e) => setPrice(e.target.value)}
+          label="Prix de vente"
+          value={price_vente}
+          placeholder={'Modifier Le Prix de vente'}
+          onChange={(e) => setPriceVente(e.target.value)}
         />
         <Input
           label="Prix de produit"
@@ -401,8 +397,8 @@ export const Products = (props) => {
             <p className='value'>{productDetails.name}</p>
           </Col>
           <Col md="6">
-            <label className='key'>Prix</label>
-            <p className='value'>{productDetails.price}</p>
+            <label className='key'>Prix d'achat</label>
+            <p className='value'>{productDetails.price_achat}</p>
           </Col>
         </Row>
         <Row>
@@ -420,7 +416,10 @@ export const Products = (props) => {
             <label className='key'>Description</label>
             <p className='value'>{productDetails.description}</p>
           </Col>
-
+          <Col md="6">
+            <label className='key'>Prix de vente</label>
+            <p className='value'>{productDetails.price_vente}</p>
+          </Col>
         </Row>
 
 
@@ -434,10 +433,10 @@ export const Products = (props) => {
         <Row>
           <Col>
             <div style={{  justifyContent: 'space-between' }}>
-              <h3>Les produit qui sont en Stock</h3>
+              <h3>Les Boites qui sont en stock</h3>
               <Button  style={{ margin :'5px'}} onClick={handleShow1}>Edit</Button>
               <Button style={{ margin :'5px'}} onClick={handleShow2}>Suprimer</Button>
-              <Button style={{ margin :'5px'}} onClick={handleShow}>Ajouter un produit</Button>
+              <Button style={{ margin :'5px'}} onClick={handleShow}>Ajouter des boites</Button>
             </div>
           </Col>
           <Col>

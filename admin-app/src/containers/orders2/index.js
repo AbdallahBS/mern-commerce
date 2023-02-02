@@ -9,7 +9,7 @@ import './index.css'
 import ReactToPrint from 'react-to-print'
 let options =[]
 
-
+let PrixTotal=0
 export const Orders = (props) => {
   const product = useSelector(state => state.product);
   let quantity = 0;
@@ -27,20 +27,26 @@ export const Orders = (props) => {
   console.log(helper)
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
-
   const ComponentRef= useRef()
   const [handleKey, setHandleKey] = useState('');
+  const [handleKey1, setHandleKey1] = useState('');
+  const [handleKey2, setHandleKey2] = useState('');
   const [handleKeyR, setHandleKeyR] = useState('');
   const [change,setChange]= useState('')
 
- 
+  const formatter= new Intl.NumberFormat()
+  if(handleKey2==='Enter'){
+      document.getElementById('i').focus()
+      setHandleKey2("")
+  }
+  
   if(handleKey==='Enter'){
+    document.getElementById('form1').focus()
     pass1=true
     setHandleKey('')
-    console.log(handleKey)
+   
     quantity=document.getElementById("i").value
     document.getElementById('form1').value=""
-    document.getElementById('form1').focus()
     document.getElementById('i').value=""
 
     if(!quantity){
@@ -48,6 +54,9 @@ export const Orders = (props) => {
     }
   }
   
+  if(handleKey1==='Enter'){
+    document.getElementById('rd').value=formatter.format(PrixTotal-document.getElementById('r').value)
+  }
   const createOrderList = (categories,options,quantity) => {
     console.log(query.substring(0,7))
     if (categories.id==query){
@@ -56,13 +65,13 @@ export const Orders = (props) => {
     
     { value: categories._id,id:categories.id, name: categories.name, prix : categories.price ,quantity: quantity,PT: categories.price * quantity})
     console.log(query);
+    PrixTotal=PrixTotal+quantity*categories.price
   }
 else if (categories.id==query.substring(0,7)){
 
   options.push(
     {value: categories._id ,id:categories.id,name: categories.name, prix : categories.price ,quantity: query.substring(8,query.length-1)/1000,PT: categories.price * query.substring(8,query.length-1)/1000})
-  
-  console.log("quantité",query.substring(8,query.length-1)/1000,"id")
+    PrixTotal=PrixTotal+categories.price * query.substring(8,query.length-1)/1000
 }
     return options;
 }
@@ -81,7 +90,9 @@ const calcpt = (options) => {
   const handleShow = () => {
     setShow(true);
     console.log(options)
+    
     for(let i=0;i<options.length;i++){
+    setTimeout(function(i){
 
     
     const form = new FormData();
@@ -89,18 +100,15 @@ const calcpt = (options) => {
     form.append('id', options[i].id);
     form.append('quantity', options[i].quantity);
     form.append('price_totale',options[i].PT)
-  
+
     dispatch(addHistory(form));
+  },1000*i,i)
+}
   }
 
-  }
-  const handleChange=()=>{
-    
-    if(document.getElementById('hl')!=0){
-    document.getElementById('form1').value=document.getElementById('hl').value
-    setQuery(document.getElementById('hl').value)
-    }}
-    const handleClose = () => setShow(false);
+  const handleClose = () => {
+    window.location.reload(true);
+  };
   const renderorders = () => {
    
     return (
@@ -108,7 +116,7 @@ const calcpt = (options) => {
       <Table responsive="sm">
         <thead>
           <tr>
-            <th>#</th>
+          
             <th>Nom de produit</th>
             <th>Prix</th>
             <th>Quantité</th>
@@ -124,11 +132,11 @@ const calcpt = (options) => {
                
                 <tbody>
                 <tr key={option.value}>
-                  <td>2</td>
+                  
                   <td>{option.name}</td>
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
-                  <td>{option.PT}</td>
+                  <td>{formatter.format(option.PT)}</td>
                   <td>{option.RM}</td>
                 </tr>
                 </tbody> 
@@ -139,23 +147,13 @@ const calcpt = (options) => {
       </Table>
     )
   }
-  const renderhelp=()=>{
-    return (
-    
-    <Form.Select aria-label="Default select example" onChange={handleChange} id='hl'>
-    <option> select menu</option>
-    {helper.map((help)=>(
-      <option value={help.id}>{help.name}</option>
-    ))}
-  </Form.Select>
-  )}
   return (
     
     <Layout sidebar>
       <Container>
         <Row>
         <Col>
-        { renderhelp()}
+       
      </Col>
 
         </Row>
@@ -173,8 +171,8 @@ const calcpt = (options) => {
                   id="form1"
                   placeholder='code barre'
                   class="form-control"
-                  
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e)=>setQuery(e.target.value)}
+                  onKeyPress={(e)=>setHandleKey2(e.key)}
                 />
 
               </div>
@@ -190,6 +188,20 @@ const calcpt = (options) => {
             </div>
           </Col>
         </Row>
+        <Row><Col style={{float :'left'}}><h5>Prix Total : {PrixTotal? PrixTotal:null}</h5></Col>
+        <Col><input type="text" 
+                  placeholder="Reglements : ESPECE"
+                  class="form-control"
+                  id='r'
+                  onKeyPress={(e)=>setHandleKey1(e.key)}
+                  
+                />
+                <input type="text" 
+                  placeholder="Rendu"
+                  class="form-control"
+                  id='rd'
+                  
+                /></Col></Row>
         <Row>
           <Col>
             
@@ -199,7 +211,6 @@ const calcpt = (options) => {
         </Row>
       </Container>
       <Button onClick={handleShow} >Valideé</Button>
-      
       <Modal
         show={show}
         handleClose={handleClose}
@@ -212,11 +223,10 @@ const calcpt = (options) => {
         <div class="logo">
         <h3>  Superette Amrouch</h3>
         <h5>Zouiet El Mgaiez</h5>
-        <h5>www.3amrouchEcom.com</h5>
+       
         </div>
         <hr></hr>
         <div class="ticket">
-       
         <p>Servi Par : Administrateur</p>
         </div>
         <hr></hr>
@@ -237,16 +247,20 @@ const calcpt = (options) => {
                   <td>{option.name}</td>
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
-                  <td>{parseInt(option.PT)}</td>
+                  <td>{formatter.format(parseInt(option.PT))}</td>
                 </tr>
               
               )
           }
       </tbody>
     </table>
-    
+    <hr></hr>
     <div class="total">
-      <h3>Prix Total : {parseInt(calcpt(options))}</h3>
+      <h3>Prix Total : {formatter.format(parseInt(calcpt(options)))}</h3>
+    </div>
+    <div class="info">
+      <p>Reglements : {document.getElementById('r')? formatter.format(document.getElementById('r').value): null}</p>
+      <p>Rendu : {document.getElementById('rd')? document.getElementById('rd').value  : null}</p>
     </div>
   
     <div class="footer">

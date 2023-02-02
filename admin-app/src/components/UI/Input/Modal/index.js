@@ -18,7 +18,7 @@ export const NewModal = (props) => {
     <Modal.Footer>
 
         <Button variant="primary" onClick={props.handleClose}>
-            Save Changes
+            save
         </Button>
     </Modal.Footer>
 </Modal>

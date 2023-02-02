@@ -33,7 +33,7 @@ exports.initialData = async(req,res)=>{
                                      
                                       .exec();
         const packs = await Packs.find({})
-                                      .select('_id id name price price_product quantity description category createdAt')
+                                      .select('_id id name price_achat price_vente price_product quantity description category createdAt')
                                      
                                       .exec();
         res.status(200).json({

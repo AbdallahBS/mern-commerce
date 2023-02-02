@@ -9,7 +9,7 @@ export const addHistory = form =>{
 }
 export const addHistoryP = form =>{
     return async dispatch =>{
-        const res = await axios.post('historyp/add' , form);
+        const res = await axios.post('historyP/add' , form);
         console.log(res);
     }
 }

@@ -9,10 +9,15 @@ const packSchema= new mongoose.Schema({
         type : String,
         required : true,
     },
-    price : {
+    price_achat : {
         type : String,
         required : true
     },
+    price_vente : {
+        type : String,
+        required : true
+    },
+    
     price_product : {
         type : String,
         required : true

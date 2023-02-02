@@ -13,6 +13,7 @@ import { getHistoryD,getHistoryN } from '../../actions';
 export const History = (props) => {
     const dispatch=useDispatch()
     const historyN =  useSelector(state => state.historyN);
+    const formatter= new Intl.NumberFormat()
     const form = new FormData();
     const input1=document.getElementById('time1')
     const input2=document.getElementById('time2')
@@ -40,7 +41,7 @@ export const History = (props) => {
     <input type='text' id='code' placeholder='Code Barre'></input>
     <Button onClick={()=>dispatch(getHistoryN(form))}>afficher les ventes (cliquer 2 fois !)</Button>
     <hr></hr>
-    <h2> Prix total {PT ? PT:null}</h2>
+    <h2> Prix total {PT ? formatter.format(PT):null} DT</h2>
     <Table striped bordered hover variant="dark">
       <thead>
         <tr>
@@ -61,11 +62,9 @@ export const History = (props) => {
           <td></td>
           <td>{history.name}</td>
           <td>{history.quantity}</td>
-          <td>{history.price_totale}</td>
+          <td>{formatter.format(history.price_totale)}</td>
           <td>{history.createdAt}</td>
         </tr> ):null }
-        
-       
       </tbody>
     </Table>
       

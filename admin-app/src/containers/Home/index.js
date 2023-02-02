@@ -12,6 +12,7 @@ import { getHistoryD,getHistoryN } from '../../actions';
 
 export const Home = (props) => {
   const [pt,setPT]=useState('')
+  const formatter= new Intl.NumberFormat()
   const dispatch=useDispatch()
   const history =  useSelector(state => state.history);
   const today = new Date()
@@ -34,25 +35,12 @@ export const Home = (props) => {
     }
   }  
 
-  
-  
-  
- 
-
-
-    
-      
-    
-    
-    
-    
-  
   return (
 
     <Layout sidebar>
     
       <h1>Orders <span id='order'>{history.history.data? history.history.data.length : null}</span></h1>
-      <h1>Prix TOtale <span id='PT'>{history.history.data? PT : null}</span></h1>
+      <h1>Prix Totale <span id='PT'>{history.history.data? formatter.format(PT)  : null}</span></h1>
    
    
       <Button onClick={(()=>dispatch(getHistoryD(form)))}>afficher la liste des ventes ajourd'hui </Button>
@@ -76,7 +64,7 @@ export const Home = (props) => {
           <td></td>
           <td>{history.name}</td>
           <td>{history.quantity}</td>
-          <td>{history.price_totale}</td>
+          <td>{formatter.format(history.price_totale)}</td>
           <td>{history.createdAt}</td>
         </tr> ):null }
         
