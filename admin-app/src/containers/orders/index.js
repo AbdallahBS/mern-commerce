@@ -11,11 +11,9 @@ import ReactToPrint from 'react-to-print'
 
 let options =[]
 let PrixTotal=0
-export const Orders = (props) => {
-
-  
+let ne=1
+export const Orders = (props) => {  
   const dispatch=useDispatch()
- 
   let quantity = 0;
   let remise=0;
   let pass1=false;
@@ -100,6 +98,38 @@ const calcpt = (options) => {
       
     }
   }
+  const handledelete = (index)=>{
+    console.log(index)
+    PrixTotal=PrixTotal-options[index].PT
+    setHandleKey('Enter')
+    console.log("initial option",options)
+    options.splice(index,1)
+    console.log("res",options)
+    console.log('ne',ne)
+    setQuery(toString(ne))
+    setHandleKey('Enter')
+    ne=100
+    document.getElementById('form1').value=""
+    document.getElementById('i').focus()
+   
+  }
+  const handlemodf = (e,index,v)=>{
+    if(e==="Enter"){
+    console.log("runn")
+    console.log(index)
+    options[index].quantity=v
+    PrixTotal=(PrixTotal-options[index].PT)+v*options[index].prix
+    options[index].PT=v*options[index].prix
+    
+    console.log(options)
+    setHandleKey('Enter')
+   
+    setQuery(toString(ne))
+    setHandleKey('Enter')
+    ne=100
+    document.getElementById('form1').value=""
+    document.getElementById('i').focus()
+    }}
 
   const handleClose = () =>     window.location.reload(true);
   const ComponentRef=useRef()
@@ -116,22 +146,30 @@ const calcpt = (options) => {
             <th>Quantité</th>
             <th>Prix Total</th>
             <th>Remise</th>
+            <th></th>
+            <th>Modifier la quantiter</th>
           </tr>
         </thead>
        
           { 
-             options.map((option)=>(
+             options.map((option,index)=>(
 
              
                
                 <tbody>
                 <tr key={option.value}>
-                  
                   <td>{option.name}</td>
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
                   <td>{formatter.format(option.PT)}</td>
                   <td>{option.RM}</td>
+                  <td><Button onClick={()=>handledelete(index)}>Delete</Button></td>
+                  <td>   <input type="text" 
+                  placeholder="Quantieé"
+                  class="form-control"
+                  id='ii'
+                  onKeyPress={(e)=>handlemodf(e.key,index,e.target.value)}
+                /></td>
                 </tr>
                 </tbody> 
                 
@@ -231,6 +269,7 @@ const calcpt = (options) => {
           <th>Qte</th>
           <th>Total</th>
           <th>Remise</th>
+       
         </tr>
       </thead>
       <tbody>
@@ -242,6 +281,7 @@ const calcpt = (options) => {
                   <td>{option.quantity}</td>
                   <td>{formatter.format(option.PT)}</td>
                   <td>{option.RM}</td>
+                  
                 </tr>
                 
               )
