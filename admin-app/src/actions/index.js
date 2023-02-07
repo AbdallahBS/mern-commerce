@@ -5,3 +5,4 @@ export * from './initialData.action';
 export * from './product.action';
 export * from './pack.action';
 export * from './history.action';
+export * from './achat.actions';
