@@ -36,3 +36,6 @@ export const historyConstants = {
         GET_DAY_HISTORY_SUCCESS:  'GET_DAY_HISTORY_SUCCESS',
         GET_N_HISTORY_SUCCESS: 'GET_N_HISTORY_SUCCESS'
 }
+export const historyAchatConstants = {
+        GET_HISTORY_ACHAT_SUCCESS:  'GET_HISTORY_ACHAT_SUCCESS',
+}

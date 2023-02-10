@@ -12,3 +12,9 @@ export const dropProduct = form =>{
         console.log(res);
     }
 }
+export const modfProduct = form =>{
+    return async dispatch =>{
+        const res = await axios.post('product/modf' , form);
+        console.log(res);
+    }
+}
