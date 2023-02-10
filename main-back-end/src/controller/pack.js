@@ -105,7 +105,7 @@ exports.updatePack = async (req, res) => {
         }
          productToUpdate.save()
          packToUpdate.save();
-        }
+        
         
         historyToUpdate = await History.findOne({ id: id })
 
@@ -119,6 +119,7 @@ exports.updatePack = async (req, res) => {
 
         }
         historyToUpdate.save()
+    }
     
 
 exports.deletePack = async (req, res) => {
