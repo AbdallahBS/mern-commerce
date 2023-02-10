@@ -150,6 +150,13 @@ export const Products = (props) => {
           }
         }
       })
+    
+    console.log(nc)
+    console.log(nqp)
+    console.log(nq)
+    console.log(np)
+    console.log(nu)
+    console.log(nt)
    for (let i = 0; i < np.length; i++) {
       const form = new FormData();
       form.append('id', list[i]);

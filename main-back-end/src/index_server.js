@@ -12,7 +12,6 @@ const productRoutes = require('./routes/product');
 const cartRoutes = require('./routes/cart');
 const packRoutes = require('./routes/pack');
 const historyRoutes = require('./routes/history');
-const historyachatRoutes = require('./routes/historyachat');
 const initialDataRoutes = require('./routes/admin/initialData');
 
 
@@ -37,7 +36,6 @@ app.use('/api',categoryRoutes);
 app.use('/api',productRoutes);
 app.use('/api',cartRoutes);
 app.use('/api',historyRoutes);
-app.use('/api',historyachatRoutes);
 app.use('/api',initialDataRoutes);
 app.listen(process.env.PORT, ()=>{
     console.log(process.env.PORT);

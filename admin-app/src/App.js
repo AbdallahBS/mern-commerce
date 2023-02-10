@@ -3,7 +3,6 @@ import './App.css';
 import {  BrowserRouter as Router, Route , Routes} from 'react-router-dom';
 import Home from './containers/Home';
 import History from './containers/HistoryN/history';
-import HistoryAchat from './containers/historyachat/history';
 import Signin from './containers/Signin';
 import Signup from './containers/Signup';
 import PrivateRoute from './components/HOC/PrivateRoute';
@@ -37,9 +36,6 @@ function App() {
           </Route>
           <Route  exact element={<PrivateRoute/>}>
             <Route exact path="/history" element={<History/>}/>
-          </Route> 
-          <Route  exact element={<PrivateRoute/>}>
-            <Route exact path="/historyachat" element={<HistoryAchat/>}/>
           </Route> 
           <Route  exact element={<PrivateRoute/>}>
                <Route  exact path="/products" element={<Products/>} />

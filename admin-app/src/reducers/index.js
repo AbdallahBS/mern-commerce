@@ -7,7 +7,6 @@ import userReducer from './user.reducer';
 import packReducer from './pack.reducer';
 import historyReducer from './history.reducer';
 import historyNReducer from './historyN.reducer';
-import historyachatReducer from './historyachat.reducer';
 
 const rootReducer = combineReducers ({
     user : userReducer,
@@ -17,7 +16,6 @@ const rootReducer = combineReducers ({
     order : orderReducer,
     pack : packReducer,
     history : historyReducer,
-    historyN : historyNReducer,
-    historyachat: historyachatReducer,
+    historyN : historyNReducer
 }); 
 export default rootReducer;

@@ -18,10 +18,10 @@ const Layout =(props)=>{
             <div class="row">
             <div class="col-2" id="sidebar">
             <ul>
-              <li><NavLink to ={'/'}>Accueil</NavLink></li>
-              <li><NavLink to ={'/history'}>Historique de Vente</NavLink></li>
-              <li><NavLink to ={'/historyachat'}>Historique d'achat</NavLink></li>
-              <li><NavLink to ={'/packs'}>Boites</NavLink></li>
+               <li><NavLink to ={'/'}>Accueil</NavLink></li>
+               <li><NavLink to ={'/history'}>History</NavLink></li>
+               <li><NavLink to ={'/packs'}>Boites</NavLink></li>
+          
               <li><NavLink to ={'/products'}>Produits</NavLink></li>
               <li><NavLink to ={'/orders'}>Demandes (Boites)</NavLink></li>
               <li><NavLink to ={'/orders2'}>Demandes (Piece)</NavLink></li>

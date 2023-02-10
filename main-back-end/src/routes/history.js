@@ -1,7 +1,6 @@
 const express = require('express');
 const { requireSignin, adminMiddleware } = require('../command-middleware');
 const {addHistory, getHistoryD,getHistoryN, addHistoryP} = require('../controller/history')
-
 const multer = require('multer');
 const router = express.Router();
 
