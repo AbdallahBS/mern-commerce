@@ -97,6 +97,11 @@ exports.updatePack = async (req, res) => {
         if (price_product) {
             packToUpdate.price_product = price_product
             productToUpdate.price=price_product
+
+        }
+         productToUpdate.save()
+            
+
         }
          productToUpdate.save()
          packToUpdate.save();
@@ -114,7 +119,8 @@ exports.updatePack = async (req, res) => {
 
         }
         historyToUpdate.save()
-    }
+    
+
 exports.deletePack = async (req, res) => {
     await pack.deleteOne({ id: req.body.id })
     await product.deleteOne({ id: req.body.id })
