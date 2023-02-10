@@ -3,6 +3,7 @@ import './App.css';
 import {  BrowserRouter as Router, Route , Routes} from 'react-router-dom';
 import Home from './containers/Home';
 import History from './containers/HistoryN/history';
+import HistoryAchat from './containers/historyachat/history';
 import Signin from './containers/Signin';
 import Signup from './containers/Signup';
 import PrivateRoute from './components/HOC/PrivateRoute';
@@ -11,6 +12,7 @@ import Orders from './containers/orders';
 import Orders2 from './containers/orders2';
 import Packs from './containers/packs';
 import Category from './containers/category';
+import Rentable from './containers/Rentable/Rentable';
 import { useDispatch , useSelector } from 'react-redux';
 import {isUserLoggedIn , getAllCategory} from './actions';
 import { getInitialData } from './actions/initialData.action';
@@ -37,6 +39,12 @@ function App() {
           <Route  exact element={<PrivateRoute/>}>
             <Route exact path="/history" element={<History/>}/>
           </Route> 
+          <Route  exact element={<PrivateRoute/>}>
+            <Route exact path="/historyachat" element={<HistoryAchat/>}/>
+          </Route>
+          <Route  exact element={<PrivateRoute/>}>
+            <Route exact path="/rentable" element={<Rentable/>}/>
+          </Route>  
           <Route  exact element={<PrivateRoute/>}>
                <Route  exact path="/products" element={<Products/>} />
           </Route> 

@@ -1,12 +1,10 @@
 const express = require('express');
-const { requireSignin, adminMiddleware } = require('../command-middleware');
-const {createProduct, dropproduct, modfProduct} = require('../controller/product');
+const {getRentable} = require('../controller/rentable');
 const router = express.Router();
 //const {} = require('../controller/category');
 const multer = require('multer');
 const path = require('path');
 const shortid = require('shortid');
-const product = require('../models/product');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null,path.join(path.dirname(__dirname),'uploads'))
@@ -16,8 +14,7 @@ const storage = multer.diskStorage({
     }
   })
 const upload = multer({storage});
-router.post('/product/create',upload.array('product picture'),createProduct);
-router.post('/product/drop',upload.array('product picture'),dropproduct);
-router.post('/product/modf',upload.array('product picture'),modfProduct);
+
+router.post('/rentable/get',upload.array('product picture'),getRentable);
 //router.get('/category/getcategory',getCategorires)
 module.exports=router;

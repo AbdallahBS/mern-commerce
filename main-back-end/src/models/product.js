@@ -14,6 +14,9 @@ const productSchema= new mongoose.Schema({
         type : String,
         
     },
+    priceAchat : {
+        type : String,  
+    },
     quantityp : {
         type : String,
         

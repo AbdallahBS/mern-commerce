@@ -5,7 +5,7 @@ import Input from '../../components/UI/Input';
 import Modal from '../../components/UI/Input/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Table } from 'react-bootstrap';
-import { addProduct,dropProduct } from '../../actions';
+import { addProduct,dropProduct, modfProduct } from '../../actions';
 import './style.css';
 import { generatePublicUrl } from '../../urlConfig';
 
@@ -21,12 +21,15 @@ export const Products = (props) => {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
-  const formatter= new Intl.NumberFormat()
+  const [ccategory, setCategory] = useState('');
+  const [priceAchat, setPriceAchat] = useState('');
+  const formatter= new Intl.NumberFormat();
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [productPictures, setProductPictures] = useState([]);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
   const [productDetailModal,setProductDetailModal]=useState(false);
   const [query,setQuery] =useState('');
   const [productDetails,setProductDetails]= useState(null);
@@ -40,8 +43,8 @@ export const Products = (props) => {
     form.append('name', name);
     form.append('quantityp', quantity);
     form.append('price', price);
-    
-   
+    form.append('priceAchat', priceAchat);
+    form.append('category', ccategory);
     dispatch(addProduct(form));
     setShow(false)
   }
@@ -51,14 +54,24 @@ export const Products = (props) => {
     dispatch(dropProduct(form));
     setShow1(false)
   }
+  const handleClose2 = () => {
+   
+    const form = new FormData();
+    form.append('id', id);
+    form.append('name', name);
+    form.append('quantityp', quantity);
+    form.append('price', price);
+    dispatch(modfProduct(form));
+    setShow2(false)
+  }
   const handleShow = () => setShow(true);
   const handleShow1 = () => setShow1(true);
+  const handleShow2 = () => setShow2(true);
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
       options.push({ value: category._id, name: category.name })
       if (category.children.length > 0) {
         createCategoryList(category.children, options)
-
       }
     }
     return options;
@@ -86,6 +99,7 @@ export const Products = (props) => {
             <th>Nom de produit</th>
             <th>Prix</th>
             <th>Quantité</th>
+            <th>Prix d'achat</th>
             <th>Fournisseur</th>
             <th>Code barre</th>
           </tr>
@@ -101,7 +115,7 @@ export const Products = (props) => {
                   <td>{product.name}</td>
                   <td>{formatter.format(product.price)}</td>
                   <td>{product.quantityp}</td>
-
+                    <td>{product.priceAchat}</td>
                   <td>{product.category}</td>
                   <td>{product.id}</td>
                 </tr>
@@ -111,6 +125,40 @@ export const Products = (props) => {
 
         </tbody>
       </Table>
+    )
+  }
+  const renderModfProductModal=()=>{
+    return(
+      <Modal
+      show={show2}
+      handleClose={handleClose2}
+      modalTitle={'modifier un produit'}
+    >
+       <Input
+        label="Code"
+        value={id}
+        placeholder={'Code a bar'}
+        onChange={(e) => setId(e.target.value)}
+      />
+      <Input
+        label="Name"
+        value={name}
+        placeholder={'modifier le nom'}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Input
+        label="Quantity"
+        value={quantity}
+        placeholder={'modifier la quantiter'}
+        onChange={(e) => setQuantity(e.target.value)}
+      />
+      <Input
+        label="price"
+        value={price}
+        placeholder={'modifier le prix'}
+        onChange={(e) => setPrice(e.target.value)}
+      />
+    </Modal>
     )
   }
   const renderAddProductModal=()=>{
@@ -144,10 +192,18 @@ export const Products = (props) => {
         placeholder={'price'}
         onChange={(e) => setPrice(e.target.value)}
       />
-     
-
-
-      
+       <Input
+        label="prix d'achat"
+        value={priceAchat}
+        placeholder={"prix d'achat"}
+        onChange={(e) => setPriceAchat(e.target.value)}
+      />
+       <Input
+        label="Fournisseur"
+        value={ccategory}
+        placeholder={"fournisseur"}
+        onChange={(e) => setCategory(e.target.value)}
+      />
       <input type="file" name="productPicture" onChange={handleProductPicture} />
     </Modal>
     )
@@ -242,10 +298,9 @@ export const Products = (props) => {
           <Col>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <h3>Les produit qui sont en Stock</h3>
-
               <Button style={{margin : "5px" }}  onClick={handleShow}>Ajouter un produit</Button>
-              <Button style={{margin : "5px" }} onClick={handleShow1}>Supprimer un produit</Button>
-              
+              <Button style={{margin : "5px" }} onClick={handleShow2}>Modifier un produit</Button>
+              <Button style={{margin : "5px" }} onClick={handleShow1}>Supprimer un produit</Button>  
             </div>
           </Col>
           <Col>
@@ -271,6 +326,7 @@ export const Products = (props) => {
         </Row>
       </Container>
       {renderAddProductModal()}
+      {renderModfProductModal()}
       {renderDropProductModal()}
       {renderShowProductDetailsModal()}
     </Layout>

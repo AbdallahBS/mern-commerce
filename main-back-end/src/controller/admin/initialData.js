@@ -29,7 +29,7 @@ function createCategories(categories,parentId = null){
 exports.initialData = async(req,res)=>{
         const categories = await Category.find({}).exec();
         const products = await Product.find({})
-                                      .select('_id id name price quantityp description productPicture category')
+                                      .select('_id id name price quantityp description priceAchat productPicture category')
                                      
                                       .exec();
         const packs = await Packs.find({})

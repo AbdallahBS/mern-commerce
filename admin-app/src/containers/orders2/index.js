@@ -8,7 +8,7 @@ import Modal from '../../components/UI/Input/Modal'
 import './index.css'
 import ReactToPrint from 'react-to-print'
 let options =[]
-
+let ne=1
 let PrixTotal=0
 export const Orders = (props) => {
   const product = useSelector(state => state.product);
@@ -31,6 +31,7 @@ export const Orders = (props) => {
   const [handleKey, setHandleKey] = useState('');
   const [handleKey1, setHandleKey1] = useState('');
   const [handleKey2, setHandleKey2] = useState('');
+  const [handleKey6, setHandleKey6] = useState('');
   const [handleKeyR, setHandleKeyR] = useState('');
   const [change,setChange]= useState('')
 
@@ -80,7 +81,6 @@ const calcpt = (options) => {
   for (let category of options) {
      prixtotal=prixtotal+category.PT
   }
-  
   return prixtotal;
 }
   
@@ -109,6 +109,39 @@ const calcpt = (options) => {
   const handleClose = () => {
     window.location.reload(true);
   };
+  const handledelete = (index)=>{
+    console.log(index)
+    PrixTotal=PrixTotal-options[index].PT
+    setHandleKey('Enter')
+    console.log("initial option",options)
+    options.splice(index,1)
+    console.log("res",options)
+    console.log('ne',ne)
+    setQuery(toString(ne))
+    setHandleKey('Enter')
+    ne=100
+    document.getElementById('form1').value=""
+    document.getElementById('i').focus()
+   
+  }
+  const handlemodf = (e,index,v)=>{
+    if(e==="Enter"){
+    console.log("runn")
+    console.log(index)
+    options[index].quantity=v
+    PrixTotal=(PrixTotal-options[index].PT)+v*options[index].prix
+    options[index].PT=v*options[index].prix
+    
+    console.log(options)
+    setHandleKey('Enter')
+   
+    setQuery(toString(ne))
+    setHandleKey('Enter')
+    ne=100
+    document.getElementById('form1').value=""
+    document.getElementById('i').focus()
+    }
+  }
   const renderorders = () => {
    
     return (
@@ -121,12 +154,13 @@ const calcpt = (options) => {
             <th>Prix</th>
             <th>Quantité</th>
             <th>Prix Total</th>
-            <th>Remise</th>
+            <th></th>
+            <th>Modifier la quantiter</th>
           </tr>
         </thead>
        
           { 
-             options.map((option)=>(
+             options.map((option,index)=>(
 
              
                
@@ -137,7 +171,13 @@ const calcpt = (options) => {
                   <td>{option.prix}</td>
                   <td>{option.quantity}</td>
                   <td>{formatter.format(option.PT)}</td>
-                  <td>{option.RM}</td>
+                  <td><Button onClick={() =>handledelete(index)}>delete</Button></td>
+                  <td>   <input type="text" 
+                  placeholder="Quantieé"
+                  class="form-control"
+                  id='ii'
+                  onKeyPress={(e)=>handlemodf(e.key,index,e.target.value)}
+                /></td>
                 </tr>
                 </tbody> 
                 

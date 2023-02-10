@@ -17,7 +17,6 @@ export const getHistoryD = form =>{
     return async dispatch =>{
         const res = await axios.post('history/getDay' , form);
         const history=res.data
-      
         dispatch({
             type : historyConstants.GET_DAY_HISTORY_SUCCESS,
             payload : {history}
